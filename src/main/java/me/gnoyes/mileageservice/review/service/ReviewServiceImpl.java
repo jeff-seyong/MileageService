@@ -33,8 +33,7 @@ public class ReviewServiceImpl implements ReviewService {
             case MOD:
                 return onModEvent(eventDto);
             case DELETE:
-                onDeleteEvent(eventDto);
-                return new ReviewEventResponseDto();
+                return onDeleteEvent(eventDto);
             default:
                 throw new RuntimeException();
         }

@@ -81,7 +81,7 @@ public class StandardUserPointService implements UserPointService {
 
         userPointHistoryRepository.save(new UserPointHistory(reviewId, -reviewPointSum, PointType.REVIEW_DELETE));
 
-        return reviewPointSum;
+        return -reviewPointSum;
     }
 
     private int checkTextPoint(int oldContentsSize, int newContentsSize) {
