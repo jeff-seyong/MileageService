@@ -47,7 +47,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         boolean bonusFlag = checkFirstReview(placeId);
         log.info("> userId: {}, placeId: {}, bonusFlag: {}", userId, placeId, bonusFlag);
-        ReviewEventHistory reviewEventHistory = addReviewEventHistory(new ReviewEventHistory(eventDto));
+        ReviewEventHistory reviewEventHistory = appendReviewEventHistory(new ReviewEventHistory(eventDto));
 
         UserPointAddApplyDto userPointAddApplyDto = UserPointAddApplyDto.builder()
                 .reviewId(reviewEventHistory.getReviewId())
@@ -85,7 +85,7 @@ public class ReviewServiceImpl implements ReviewService {
         int oldContentsSize = oldReviewEventHistory.getContentsSize();
         int oldPhotoCount = oldReviewEventHistory.getPhotoCount();
 
-        ReviewEventHistory reviewEventHistory = addReviewEventHistory(new ReviewEventHistory(eventDto));
+        ReviewEventHistory reviewEventHistory = appendReviewEventHistory(new ReviewEventHistory(eventDto));
         int newContentsSize = reviewEventHistory.getContentsSize();
         int newPhotoCount = reviewEventHistory.getPhotoCount();
 
@@ -123,7 +123,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         checkValidation(userId, placeId);
 
-        ReviewEventHistory reviewEventHistory = addReviewEventHistory(new ReviewEventHistory(eventDto));
+        ReviewEventHistory reviewEventHistory = appendReviewEventHistory(new ReviewEventHistory(eventDto));
         UserPointDeleteApplyDto userPointDeleteApplyDto = UserPointDeleteApplyDto.builder()
                 .reviewId(reviewEventHistory.getReviewId())
                 .action(reviewEventHistory.getAction())
@@ -133,7 +133,7 @@ public class ReviewServiceImpl implements ReviewService {
         return new ReviewEventResponseDto(eventDto.getUserId(), point);
     }
 
-    private ReviewEventHistory addReviewEventHistory(ReviewEventHistory entity) {
+    private ReviewEventHistory appendReviewEventHistory(ReviewEventHistory entity) {
         recordPointPolicy(entity);
         return reviewEventHistoryRepository.save(entity);
     }
