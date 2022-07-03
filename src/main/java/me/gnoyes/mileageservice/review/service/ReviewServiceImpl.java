@@ -3,7 +3,9 @@ package me.gnoyes.mileageservice.review.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.gnoyes.mileageservice.constants.action.EventAction;
+import me.gnoyes.mileageservice.constants.type.ResultCodeType;
 import me.gnoyes.mileageservice.event.model.dto.EventDto;
+import me.gnoyes.mileageservice.exception.ServiceException;
 import me.gnoyes.mileageservice.review.model.dto.ReviewEventResponseDto;
 import me.gnoyes.mileageservice.review.model.dto.UserPointAddApplyDto;
 import me.gnoyes.mileageservice.review.model.dto.UserPointDeleteApplyDto;
@@ -34,7 +36,7 @@ public class ReviewServiceImpl implements ReviewService {
             case DELETE:
                 return onDeleteEvent(eventDto);
             default:
-                throw new RuntimeException();
+                throw new ServiceException(ResultCodeType.FAIL_R_001);
         }
     }
 
@@ -71,7 +73,7 @@ public class ReviewServiceImpl implements ReviewService {
         if (EventAction.DELETE.equals(reviewEventHistory.getAction())) {
             return;
         }
-        throw new RuntimeException();
+        throw new ServiceException(ResultCodeType.FAIL_R_002);
     }
 
 
@@ -106,11 +108,11 @@ public class ReviewServiceImpl implements ReviewService {
         List<ReviewEventHistory> reviewEventHistoryList = reviewEventHistoryRepository.findTopByUserIdAndPlaceIdOrderByRegisterDateDesc(userId, placeId);
 
         if (reviewEventHistoryList.isEmpty()) {
-            throw new RuntimeException();
+            throw new ServiceException(ResultCodeType.FAIL_R_003);
         }
         ReviewEventHistory oldReviewEventHistory = reviewEventHistoryList.get(0);
         if (EventAction.DELETE.equals(oldReviewEventHistory.getAction())) {
-            throw new RuntimeException();
+            throw new ServiceException(ResultCodeType.FAIL_R_003);
         }
         return oldReviewEventHistory;
     }
