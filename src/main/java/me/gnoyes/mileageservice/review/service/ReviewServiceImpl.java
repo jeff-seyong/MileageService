@@ -6,6 +6,7 @@ import me.gnoyes.mileageservice.constants.action.EventAction;
 import me.gnoyes.mileageservice.event.model.dto.EventDto;
 import me.gnoyes.mileageservice.review.model.dto.ReviewEventResponseDto;
 import me.gnoyes.mileageservice.review.model.dto.UserPointAddApplyDto;
+import me.gnoyes.mileageservice.review.model.dto.UserPointDeleteApplyDto;
 import me.gnoyes.mileageservice.review.model.dto.UserPointModApplyDto;
 import me.gnoyes.mileageservice.review.model.entity.ReviewEventHistory;
 import me.gnoyes.mileageservice.review.repository.ReviewEventHistoryRepository;
@@ -55,7 +56,7 @@ public class ReviewServiceImpl implements ReviewService {
         ReviewEventHistory reviewEventHistory = addReviewEventHistory(new ReviewEventHistory(eventDto));
 
         UserPointAddApplyDto userPointAddApplyDto = UserPointAddApplyDto.builder()
-                .eventHistoryId(reviewEventHistory.getEventHistoryId())
+                .reviewId(reviewEventHistory.getReviewId())
                 .contentsSize(reviewEventHistory.getContentsSize())
                 .photoCount(reviewEventHistory.getPhotoCount())
                 .action(reviewEventHistory.getAction())
@@ -90,7 +91,7 @@ public class ReviewServiceImpl implements ReviewService {
         int newPhotoCount = reviewEventHistory.getPhotoCount();
 
         UserPointModApplyDto userPointModApplyDto = UserPointModApplyDto.builder()
-                .eventHistoryId(reviewEventHistory.getEventHistoryId())
+                .reviewId(reviewEventHistory.getReviewId())
                 .action(reviewEventHistory.getAction())
                 .oldContentsSize(oldContentsSize)
                 .oldPhotoCount(oldPhotoCount)
@@ -102,8 +103,31 @@ public class ReviewServiceImpl implements ReviewService {
         return new ReviewEventResponseDto(eventDto.getUserId(), point);
     }
 
-    public void onDeleteEvent(EventDto eventDto) {
-        log.info("ReviewServiceImpl.onDeleteEvent");
+    public ReviewEventResponseDto onDeleteEvent(EventDto eventDto) {
+        log.info("> [Review Delete] eventDto: {}", eventDto);
+
+        String userId = eventDto.getUserId();
+        String placeId = eventDto.getPlaceId();
+
+        List<ReviewEventHistory> reviewEventHistoryList = reviewEventHistoryRepository.findTopByUserIdAndPlaceIdOrderByRegisterDateDesc(userId, placeId);
+
+        if (reviewEventHistoryList.isEmpty()) {
+            throw new RuntimeException();
+        }
+
+        ReviewEventHistory oldReviewEventHistory = reviewEventHistoryList.get(0);
+        if (EventAction.DELETE.equals(oldReviewEventHistory.getAction())) {
+            throw new RuntimeException();
+        }
+
+        ReviewEventHistory reviewEventHistory = addReviewEventHistory(new ReviewEventHistory(eventDto));
+        UserPointDeleteApplyDto userPointDeleteApplyDto = UserPointDeleteApplyDto.builder()
+                .reviewId(reviewEventHistory.getReviewId())
+                .action(reviewEventHistory.getAction())
+                .build();
+        int point = userPointService.deleteEventApply(userPointDeleteApplyDto);
+
+        return new ReviewEventResponseDto(eventDto.getUserId(), point);
     }
 
     private ReviewEventHistory addReviewEventHistory(ReviewEventHistory entity) {

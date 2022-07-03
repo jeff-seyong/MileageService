@@ -4,5 +4,6 @@ public enum PointType {
     TEXT_POINT,
     PHOTO_POINT,
     BONUS_POINT,
+    REVIEW_DELETE,
     ;
 }
