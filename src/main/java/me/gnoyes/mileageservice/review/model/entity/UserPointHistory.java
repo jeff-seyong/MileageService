@@ -2,6 +2,7 @@ package me.gnoyes.mileageservice.review.model.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.gnoyes.mileageservice.constants.type.PointType;
 
 import javax.persistence.*;
 
@@ -22,8 +23,13 @@ public class UserPointHistory extends BaseInformation {
     @Column(name = "point", nullable = false, columnDefinition = "적립/차감 포인트")
     private Integer point;
 
-    public UserPointHistory(Long eventHistoryId, Integer point) {
+    @Enumerated(EnumType.STRING)
+    @Column(name = "reason", nullable = false, columnDefinition = "포인트 적립/차감 사유")
+    private PointType reason;
+
+    public UserPointHistory(Long eventHistoryId, Integer point, PointType reason) {
         this.eventHistoryId = eventHistoryId;
         this.point = point;
+        this.reason = reason;
     }
 }

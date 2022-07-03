@@ -3,6 +3,7 @@ package me.gnoyes.mileageservice.review.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.gnoyes.mileageservice.constants.policy.PointPolicy;
+import me.gnoyes.mileageservice.constants.type.PointType;
 import me.gnoyes.mileageservice.review.model.dto.UserPointAddApplyDto;
 import me.gnoyes.mileageservice.review.model.dto.UserPointModApplyDto;
 import me.gnoyes.mileageservice.review.model.entity.UserPointHistory;
@@ -33,34 +34,36 @@ public class StandardUserPointService implements UserPointService {
         int point = 0;
         if (addDto.isBonusFlag()) {
             point += BONUS_POINT;
+            userPointHistoryRepository.save(new UserPointHistory(addDto.getEventHistoryId(), BONUS_POINT, PointType.BONUS_POINT));
         }
         if (addDto.getContentsSize() >= MIN_TEXT_LENGTH) {
             point += TEXT_POINT;
+            userPointHistoryRepository.save(new UserPointHistory(addDto.getEventHistoryId(), TEXT_POINT, PointType.TEXT_POINT));
         }
         if (addDto.getPhotoCount() >= MIN_PHOTOS_LENGTH) {
             point += PHOTO_POINT;
+            userPointHistoryRepository.save(new UserPointHistory(addDto.getEventHistoryId(), PHOTO_POINT, PointType.PHOTO_POINT));
         }
-        UserPointHistory userPointHistory = new UserPointHistory(addDto.getEventHistoryId(), point);
-        UserPointHistory save = userPointHistoryRepository.save(userPointHistory);
-        return save.getPoint();
+        return point;
     }
 
     @Transactional
     public int modEventApply(UserPointModApplyDto modDto) {
         log.info("> userPointModApplyDto: {}", modDto);
+        Long eventHistoryId = modDto.getEventHistoryId();
         int point = 0;
 
         int oldContentsSize = modDto.getOldContentsSize();
         int newContentsSize = modDto.getNewContentsSize();
         point += checkTextPoint(oldContentsSize, newContentsSize);
+        userPointHistoryRepository.save(new UserPointHistory(eventHistoryId, point, PointType.TEXT_POINT));
 
         int oldPhotoCount = modDto.getOldPhotoCount();
         int newPhotoCount = modDto.getNewPhotoCount();
         point += checkPhotoPoint(oldPhotoCount, newPhotoCount);
+        userPointHistoryRepository.save(new UserPointHistory(eventHistoryId, point, PointType.PHOTO_POINT));
 
-        UserPointHistory userPointHistory = new UserPointHistory(modDto.getEventHistoryId(), point);
-        UserPointHistory save = userPointHistoryRepository.save(userPointHistory);
-        return save.getPoint();
+        return point;
     }
 
     private int checkTextPoint(int oldContentsSize, int newContentsSize) {
