@@ -5,6 +5,5 @@ import me.gnoyes.mileageservice.event.model.dto.EventDto;
 
 public interface EventService {
 
-    @SuppressWarnings("rawtypes")
     EventResponse distribute(EventDto eventDto);
 }
