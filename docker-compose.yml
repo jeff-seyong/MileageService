@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    container_name: gnoyes.mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_HOST: "root"
+      MYSQL_DATABASE: "eventservice"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      TZ: Asia/Seoul
+    volumes:
+      - ./volumes/mysql:/var/lib/mysql
+    platform: linux/amd64
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
