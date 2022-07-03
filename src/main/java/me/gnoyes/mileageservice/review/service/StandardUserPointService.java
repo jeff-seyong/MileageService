@@ -8,6 +8,7 @@ import me.gnoyes.mileageservice.review.model.dto.UserPointModApplyDto;
 import me.gnoyes.mileageservice.review.model.entity.UserPointHistory;
 import me.gnoyes.mileageservice.review.repository.UserPointHistoryRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -26,6 +27,7 @@ public class StandardUserPointService implements UserPointService {
         return PointPolicy.STANDARD;
     }
 
+    @Transactional
     public int addEventApply(UserPointAddApplyDto addDto) {
         log.info("> userPointAddApplyDto: {}", addDto);
         int point = 0;
@@ -43,6 +45,7 @@ public class StandardUserPointService implements UserPointService {
         return save.getPoint();
     }
 
+    @Transactional
     public int modEventApply(UserPointModApplyDto modDto) {
         log.info("> userPointModApplyDto: {}", modDto);
         int point = 0;
