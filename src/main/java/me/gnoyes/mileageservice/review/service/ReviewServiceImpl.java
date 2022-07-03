@@ -23,6 +23,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewEventHistoryRepository reviewEventHistoryRepository;
     private final UserPointService userPointService;
 
+    @Transactional
     public ReviewEventResponseDto distribute(EventDto eventDto) {
         EventAction action = eventDto.getAction();
         switch (action) {
@@ -38,7 +39,6 @@ public class ReviewServiceImpl implements ReviewService {
         }
     }
 
-    @Transactional
     public ReviewEventResponseDto onAddEvent(EventDto eventDto) {
         log.info("> [Review Add] eventDto: {}", eventDto);
 
@@ -66,19 +66,22 @@ public class ReviewServiceImpl implements ReviewService {
         return new ReviewEventResponseDto(eventDto.getUserId(), point);
     }
 
-    @Transactional
+
     public ReviewEventResponseDto onModEvent(EventDto eventDto) {
         log.info("> [Review Mod] eventDto: {}", eventDto);
 
         String userId = eventDto.getUserId();
         String placeId = eventDto.getPlaceId();
-        List<ReviewEventHistory> optionalReviewEventHistory = reviewEventHistoryRepository.findTopByUserIdAndPlaceIdOrderByRegisterDateDesc(userId, placeId);
+        List<ReviewEventHistory> reviewEventHistoryList = reviewEventHistoryRepository.findTopByUserIdAndPlaceIdOrderByRegisterDateDesc(userId, placeId);
 
-        if (optionalReviewEventHistory.isEmpty()) {
+        if (reviewEventHistoryList.isEmpty()) {
+            throw new RuntimeException();
+        }
+        ReviewEventHistory oldReviewEventHistory = reviewEventHistoryList.get(0);
+        if (EventAction.DELETE.equals(oldReviewEventHistory.getAction())) {
             throw new RuntimeException();
         }
 
-        ReviewEventHistory oldReviewEventHistory = optionalReviewEventHistory.get(0);
         int oldContentsSize = oldReviewEventHistory.getContentsSize();
         int oldPhotoCount = oldReviewEventHistory.getPhotoCount();
 
