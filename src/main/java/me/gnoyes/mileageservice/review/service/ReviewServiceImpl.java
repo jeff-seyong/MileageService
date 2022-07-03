@@ -6,10 +6,14 @@ import me.gnoyes.mileageservice.constants.action.EventAction;
 import me.gnoyes.mileageservice.event.model.dto.EventDto;
 import me.gnoyes.mileageservice.review.model.dto.ReviewEventResponseDto;
 import me.gnoyes.mileageservice.review.model.dto.UserPointAddApplyDto;
+import me.gnoyes.mileageservice.review.model.dto.UserPointModApplyDto;
 import me.gnoyes.mileageservice.review.model.entity.ReviewEventHistory;
 import me.gnoyes.mileageservice.review.repository.ReviewEventHistoryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -25,8 +29,7 @@ public class ReviewServiceImpl implements ReviewService {
             case ADD:
                 return onAddEvent(eventDto);
             case MOD:
-                onModEvent(eventDto);
-                return new ReviewEventResponseDto();
+                return onModEvent(eventDto);
             case DELETE:
                 onDeleteEvent(eventDto);
                 return new ReviewEventResponseDto();
@@ -38,8 +41,17 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     public ReviewEventResponseDto onAddEvent(EventDto eventDto) {
         log.info("> [Review Add] eventDto: {}", eventDto);
-        boolean bonusFlag = checkFirstReview(eventDto.getPlaceId());
-        log.info("> userId: {}, placeId: {}, bonusFlag: {}", eventDto.getUserId(), eventDto.getPlaceId(), bonusFlag);
+
+        String userId = eventDto.getUserId();
+        String placeId = eventDto.getPlaceId();
+        Optional<ReviewEventHistory> optionalReviewEventHistory = reviewEventHistoryRepository.findByUserIdAndPlaceIdAndAction(userId, placeId, EventAction.ADD);
+
+        if (optionalReviewEventHistory.isPresent()) {
+            throw new RuntimeException();
+        }
+
+        boolean bonusFlag = checkFirstReview(placeId);
+        log.info("> userId: {}, placeId: {}, bonusFlag: {}", userId, placeId, bonusFlag);
         ReviewEventHistory reviewEventHistory = addReviewEventHistory(new ReviewEventHistory(eventDto));
 
         UserPointAddApplyDto userPointAddApplyDto = UserPointAddApplyDto.builder()
@@ -54,8 +66,37 @@ public class ReviewServiceImpl implements ReviewService {
         return new ReviewEventResponseDto(eventDto.getUserId(), point);
     }
 
-    public void onModEvent(EventDto eventDto) {
-        log.info("ReviewServiceImpl.onModEvent");
+    @Transactional
+    public ReviewEventResponseDto onModEvent(EventDto eventDto) {
+        log.info("> [Review Mod] eventDto: {}", eventDto);
+
+        String userId = eventDto.getUserId();
+        String placeId = eventDto.getPlaceId();
+        List<ReviewEventHistory> optionalReviewEventHistory = reviewEventHistoryRepository.findTopByUserIdAndPlaceIdOrderByRegisterDateDesc(userId, placeId);
+
+        if (optionalReviewEventHistory.isEmpty()) {
+            throw new RuntimeException();
+        }
+
+        ReviewEventHistory oldReviewEventHistory = optionalReviewEventHistory.get(0);
+        int oldContentsSize = oldReviewEventHistory.getContentsSize();
+        int oldPhotoCount = oldReviewEventHistory.getPhotoCount();
+
+        ReviewEventHistory reviewEventHistory = addReviewEventHistory(new ReviewEventHistory(eventDto));
+        int newContentsSize = reviewEventHistory.getContentsSize();
+        int newPhotoCount = reviewEventHistory.getPhotoCount();
+
+        UserPointModApplyDto userPointModApplyDto = UserPointModApplyDto.builder()
+                .eventHistoryId(reviewEventHistory.getEventHistoryId())
+                .action(reviewEventHistory.getAction())
+                .oldContentsSize(oldContentsSize)
+                .oldPhotoCount(oldPhotoCount)
+                .newContentsSize(newContentsSize)
+                .newPhotoCount(newPhotoCount)
+                .build();
+        int point = userPointService.modEventApply(userPointModApplyDto);
+
+        return new ReviewEventResponseDto(eventDto.getUserId(), point);
     }
 
     public void onDeleteEvent(EventDto eventDto) {
