@@ -80,16 +80,8 @@ public class ReviewServiceImpl implements ReviewService {
 
         String userId = eventDto.getUserId();
         String placeId = eventDto.getPlaceId();
-        List<ReviewEventHistory> reviewEventHistoryList = reviewEventHistoryRepository.findTopByUserIdAndPlaceIdOrderByRegisterDateDesc(userId, placeId);
 
-        if (reviewEventHistoryList.isEmpty()) {
-            throw new RuntimeException();
-        }
-        ReviewEventHistory oldReviewEventHistory = reviewEventHistoryList.get(0);
-        if (EventAction.DELETE.equals(oldReviewEventHistory.getAction())) {
-            throw new RuntimeException();
-        }
-
+        ReviewEventHistory oldReviewEventHistory = checkValidation(userId, placeId);
         int oldContentsSize = oldReviewEventHistory.getContentsSize();
         int oldPhotoCount = oldReviewEventHistory.getPhotoCount();
 
@@ -110,22 +102,26 @@ public class ReviewServiceImpl implements ReviewService {
         return new ReviewEventResponseDto(eventDto.getUserId(), point);
     }
 
+    private ReviewEventHistory checkValidation(String userId, String placeId) {
+        List<ReviewEventHistory> reviewEventHistoryList = reviewEventHistoryRepository.findTopByUserIdAndPlaceIdOrderByRegisterDateDesc(userId, placeId);
+
+        if (reviewEventHistoryList.isEmpty()) {
+            throw new RuntimeException();
+        }
+        ReviewEventHistory oldReviewEventHistory = reviewEventHistoryList.get(0);
+        if (EventAction.DELETE.equals(oldReviewEventHistory.getAction())) {
+            throw new RuntimeException();
+        }
+        return oldReviewEventHistory;
+    }
+
     public ReviewEventResponseDto onDeleteEvent(EventDto eventDto) {
         log.info("> [Review Delete] eventDto: {}", eventDto);
 
         String userId = eventDto.getUserId();
         String placeId = eventDto.getPlaceId();
 
-        List<ReviewEventHistory> reviewEventHistoryList = reviewEventHistoryRepository.findTopByUserIdAndPlaceIdOrderByRegisterDateDesc(userId, placeId);
-
-        if (reviewEventHistoryList.isEmpty()) {
-            throw new RuntimeException();
-        }
-
-        ReviewEventHistory oldReviewEventHistory = reviewEventHistoryList.get(0);
-        if (EventAction.DELETE.equals(oldReviewEventHistory.getAction())) {
-            throw new RuntimeException();
-        }
+        checkValidation(userId, placeId);
 
         ReviewEventHistory reviewEventHistory = addReviewEventHistory(new ReviewEventHistory(eventDto));
         UserPointDeleteApplyDto userPointDeleteApplyDto = UserPointDeleteApplyDto.builder()
