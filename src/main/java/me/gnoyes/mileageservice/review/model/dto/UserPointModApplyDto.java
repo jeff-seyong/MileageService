@@ -8,7 +8,7 @@ import me.gnoyes.mileageservice.constants.action.EventAction;
 @Getter
 @NoArgsConstructor
 public class UserPointModApplyDto {
-    private Long eventHistoryId;
+    private String reviewId;
     private EventAction action;
     private int oldContentsSize;
     private int newContentsSize;
@@ -16,8 +16,8 @@ public class UserPointModApplyDto {
     private int newPhotoCount;
 
     @Builder
-    public UserPointModApplyDto(Long eventHistoryId, EventAction action, int oldContentsSize, int newContentsSize, int oldPhotoCount, int newPhotoCount) {
-        this.eventHistoryId = eventHistoryId;
+    public UserPointModApplyDto(String reviewId, EventAction action, int oldContentsSize, int newContentsSize, int oldPhotoCount, int newPhotoCount) {
+        this.reviewId = reviewId;
         this.action = action;
         this.oldContentsSize = oldContentsSize;
         this.newContentsSize = newContentsSize;
@@ -28,7 +28,7 @@ public class UserPointModApplyDto {
     @Override
     public String toString() {
         return "UserPointModApplyDto{" +
-                "eventHistoryId=" + eventHistoryId +
+                "reviewId=" + reviewId +
                 ", action=" + action +
                 ", oldContentsSize=" + oldContentsSize +
                 ", newContentsSize=" + newContentsSize +

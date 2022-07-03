@@ -10,15 +10,15 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor
 public class UserPointAddApplyDto {
-    private Long eventHistoryId;
+    private String reviewId;
     private EventAction action;
     private int contentsSize;
     private int photoCount;
     private boolean bonusFlag;
 
     @Builder
-    public UserPointAddApplyDto(Long eventHistoryId, EventAction action, int contentsSize, int photoCount, Boolean bonusFlag) {
-        this.eventHistoryId = eventHistoryId;
+    public UserPointAddApplyDto(String reviewId, EventAction action, int contentsSize, int photoCount, Boolean bonusFlag) {
+        this.reviewId = reviewId;
         this.action = action;
         this.contentsSize = contentsSize;
         this.photoCount = photoCount;
@@ -28,7 +28,7 @@ public class UserPointAddApplyDto {
     @Override
     public String toString() {
         return "UserPointAddApplyDto{" +
-                "eventHistoryId=" + eventHistoryId +
+                "reviewId=" + reviewId +
                 ", action=" + action +
                 ", contentsSize=" + contentsSize +
                 ", photoCount=" + photoCount +
