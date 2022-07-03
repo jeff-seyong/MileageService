@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -44,11 +43,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         String userId = eventDto.getUserId();
         String placeId = eventDto.getPlaceId();
-        Optional<ReviewEventHistory> optionalReviewEventHistory = reviewEventHistoryRepository.findByUserIdAndPlaceIdAndAction(userId, placeId, EventAction.ADD);
-
-        if (optionalReviewEventHistory.isPresent()) {
-            throw new RuntimeException();
-        }
+        checkOnlyOneReview(userId, placeId);
 
         boolean bonusFlag = checkFirstReview(placeId);
         log.info("> userId: {}, placeId: {}, bonusFlag: {}", userId, placeId, bonusFlag);
@@ -64,6 +59,19 @@ public class ReviewServiceImpl implements ReviewService {
         int point = userPointService.addEventApply(userPointAddApplyDto);
 
         return new ReviewEventResponseDto(eventDto.getUserId(), point);
+    }
+
+    private void checkOnlyOneReview(String userId, String placeId) {
+        List<ReviewEventHistory> latestReview = reviewEventHistoryRepository.findTopByUserIdAndPlaceIdOrderByRegisterDateDesc(userId, placeId);
+        if (latestReview.isEmpty()) {
+            return;
+        }
+
+        ReviewEventHistory reviewEventHistory = latestReview.get(0);
+        if (EventAction.DELETE.equals(reviewEventHistory.getAction())) {
+            return;
+        }
+        throw new RuntimeException();
     }
 
 
