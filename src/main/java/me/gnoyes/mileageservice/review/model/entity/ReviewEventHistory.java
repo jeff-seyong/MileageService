@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.gnoyes.mileageservice.constants.action.EventAction;
 import me.gnoyes.mileageservice.constants.policy.PointPolicy;
+import me.gnoyes.mileageservice.event.model.dto.EventDto;
 
 import javax.persistence.*;
 
@@ -40,4 +41,17 @@ public class ReviewEventHistory extends BaseInformation {
     @Column(name = "point_policy", columnDefinition = "적용된 포인트 적립 정책")
     @Enumerated(value = EnumType.STRING)
     private PointPolicy pointPolicy;
+
+    public ReviewEventHistory(EventDto eventDto) {
+        this.userId = eventDto.getUserId();
+        this.placeId = eventDto.getPlaceId();
+        this.reviewId = eventDto.getReviewId();
+        this.action = eventDto.getAction();
+        this.contentsSize = eventDto.getContent().length();
+        this.photoCount = eventDto.getAttachedPhotoIds().size();
+    }
+
+    public void recordPointPolicy(PointPolicy pointPolicy) {
+        this.pointPolicy = pointPolicy;
+    }
 }

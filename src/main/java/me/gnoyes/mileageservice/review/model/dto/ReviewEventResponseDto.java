@@ -5,9 +5,15 @@ import me.gnoyes.mileageservice.dto.EventResponse;
 
 @Getter
 public class ReviewEventResponseDto implements EventResponse {
-    private String str;
+
+    private String userId;
+    private int point;
 
     public ReviewEventResponseDto() {
-        this.str = "str";
+    }
+
+    public ReviewEventResponseDto(String userId, int point) {
+        this.userId = userId;
+        this.point = point;
     }
 }

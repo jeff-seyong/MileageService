@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "review_event_history")
+@Table(name = "user_point_history")
 @Getter
 @NoArgsConstructor
 public class UserPointHistory extends BaseInformation {
@@ -21,4 +21,9 @@ public class UserPointHistory extends BaseInformation {
 
     @Column(name = "point", nullable = false, columnDefinition = "적립/차감 포인트")
     private Integer point;
+
+    public UserPointHistory(Long eventHistoryId, Integer point) {
+        this.eventHistoryId = eventHistoryId;
+        this.point = point;
+    }
 }
