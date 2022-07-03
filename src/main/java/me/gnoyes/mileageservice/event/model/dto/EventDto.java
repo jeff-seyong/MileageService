@@ -1,8 +1,8 @@
-package me.gnoyes.mileageservice.event.dto;
+package me.gnoyes.mileageservice.event.model.dto;
 
 import lombok.Getter;
-import me.gnoyes.mileageservice.constants.event.EventAction;
-import me.gnoyes.mileageservice.constants.event.EventType;
+import me.gnoyes.mileageservice.constants.action.EventAction;
+import me.gnoyes.mileageservice.constants.type.EventType;
 
 import java.util.ArrayList;
 import java.util.List;

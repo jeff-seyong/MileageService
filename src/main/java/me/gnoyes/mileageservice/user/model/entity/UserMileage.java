@@ -1,7 +1,8 @@
-package me.gnoyes.mileageservice.review.entity;
+package me.gnoyes.mileageservice.user.model.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.gnoyes.mileageservice.review.model.entity.BaseInformation;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.Column;

@@ -1,4 +1,4 @@
-package me.gnoyes.mileageservice.review.entity;
+package me.gnoyes.mileageservice.review.model.entity;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

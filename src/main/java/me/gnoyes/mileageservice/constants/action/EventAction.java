@@ -1,4 +1,4 @@
-package me.gnoyes.mileageservice.constants.event;
+package me.gnoyes.mileageservice.constants.action;
 
 public enum EventAction {
     ADD,

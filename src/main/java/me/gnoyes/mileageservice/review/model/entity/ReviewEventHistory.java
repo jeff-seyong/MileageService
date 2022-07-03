@@ -1,8 +1,9 @@
-package me.gnoyes.mileageservice.review.entity;
+package me.gnoyes.mileageservice.review.model.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.gnoyes.mileageservice.constants.event.EventAction;
+import me.gnoyes.mileageservice.constants.action.EventAction;
+import me.gnoyes.mileageservice.constants.policy.PointPolicy;
 
 import javax.persistence.*;
 
@@ -37,5 +38,6 @@ public class ReviewEventHistory extends BaseInformation {
     private int photoCount;
 
     @Column(name = "point_policy", columnDefinition = "적용된 포인트 적립 정책")
-    private String pointPolicy;
+    @Enumerated(value = EnumType.STRING)
+    private PointPolicy pointPolicy;
 }
