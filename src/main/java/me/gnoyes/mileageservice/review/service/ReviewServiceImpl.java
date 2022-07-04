@@ -151,7 +151,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private boolean checkFirstReview(String placeId) {
-        if (0 < reviewEventHistoryRepository.countByPlaceId(placeId))
+        if (reviewEventHistoryRepository.countByPlaceId(placeId) == 0)
             return true;
 
         int addCount = reviewEventHistoryRepository.countByPlaceIdAndAction(placeId, EventAction.ADD);
