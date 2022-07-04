@@ -16,6 +16,8 @@ public enum ResultCodeType {
     FAIL_R_001(HttpStatus.BAD_REQUEST, "R001", "정의되지 않은 액션 타입입니다"),
     FAIL_R_002(HttpStatus.BAD_REQUEST, "R002", "이미 등록한 리뷰가 있습니다"),
     FAIL_R_003(HttpStatus.BAD_REQUEST, "R003", "리뷰가 존재하지 않거나 삭제된 리뷰입니다"),
+
+    FAIL_U_001(HttpStatus.BAD_REQUEST, "U001", "존재하지 않는 유저입니다"),
     ;
 
     private HttpStatus httpStatus;
