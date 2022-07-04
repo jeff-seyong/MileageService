@@ -56,6 +56,7 @@ public class ReviewServiceImpl implements ReviewService {
         ReviewEventHistory reviewEventHistory = appendReviewEventHistory(new ReviewEventHistory(eventDto));
 
         UserPointAddApplyDto userPointAddApplyDto = UserPointAddApplyDto.builder()
+                .userId(userId)
                 .reviewId(reviewEventHistory.getReviewId())
                 .contentsSize(reviewEventHistory.getContentsSize())
                 .photoCount(reviewEventHistory.getPhotoCount())
@@ -97,6 +98,7 @@ public class ReviewServiceImpl implements ReviewService {
         int newPhotoCount = reviewEventHistory.getPhotoCount();
 
         UserPointModApplyDto userPointModApplyDto = UserPointModApplyDto.builder()
+                .userId(userId)
                 .reviewId(reviewEventHistory.getReviewId())
                 .action(reviewEventHistory.getAction())
                 .oldContentsSize(oldContentsSize)
@@ -133,6 +135,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         ReviewEventHistory reviewEventHistory = appendReviewEventHistory(new ReviewEventHistory(eventDto));
         UserPointDeleteApplyDto userPointDeleteApplyDto = UserPointDeleteApplyDto.builder()
+                .userId(userId)
                 .reviewId(reviewEventHistory.getReviewId())
                 .action(reviewEventHistory.getAction())
                 .build();
@@ -148,7 +151,12 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private boolean checkFirstReview(String placeId) {
-        return !reviewEventHistoryRepository.existsByPlaceId(placeId);
+        if (0 < reviewEventHistoryRepository.countByPlaceId(placeId))
+            return true;
+
+        int addCount = reviewEventHistoryRepository.countByPlaceIdAndAction(placeId, EventAction.ADD);
+        int deleteCount = reviewEventHistoryRepository.countByPlaceIdAndAction(placeId, EventAction.DELETE);
+        return addCount == deleteCount;
     }
 
     private void recordPointPolicy(ReviewEventHistory reviewEventHistory) {
