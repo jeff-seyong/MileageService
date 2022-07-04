@@ -12,6 +12,8 @@ import me.gnoyes.mileageservice.review.model.dto.UserPointDeleteApplyDto;
 import me.gnoyes.mileageservice.review.model.dto.UserPointModApplyDto;
 import me.gnoyes.mileageservice.review.model.entity.ReviewEventHistory;
 import me.gnoyes.mileageservice.review.repository.ReviewEventHistoryRepository;
+import me.gnoyes.mileageservice.user.model.dto.UserMileageDto;
+import me.gnoyes.mileageservice.user.service.UserMileageService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewEventHistoryRepository reviewEventHistoryRepository;
     private final UserPointService userPointService;
+    private final UserMileageService userMileageService;
 
     @Transactional
     public ReviewEventResponseDto distribute(EventDto eventDto) {
@@ -60,7 +63,8 @@ public class ReviewServiceImpl implements ReviewService {
                 .build();
         int point = userPointService.addEventApply(userPointAddApplyDto);
 
-        return new ReviewEventResponseDto(eventDto.getUserId(), point);
+        UserMileageDto userMileageDto = userMileageService.updateMileage(userId, point);
+        return new ReviewEventResponseDto(eventDto.getUserId(), point, userMileageDto.getMileage());
     }
 
     private void checkOnlyOneReview(String userId, String placeId) {
@@ -101,7 +105,8 @@ public class ReviewServiceImpl implements ReviewService {
                 .build();
         int point = userPointService.modEventApply(userPointModApplyDto);
 
-        return new ReviewEventResponseDto(eventDto.getUserId(), point);
+        UserMileageDto userMileageDto = userMileageService.updateMileage(userId, point);
+        return new ReviewEventResponseDto(eventDto.getUserId(), point, userMileageDto.getMileage());
     }
 
     private ReviewEventHistory checkValidation(String userId, String placeId) {
@@ -132,7 +137,8 @@ public class ReviewServiceImpl implements ReviewService {
                 .build();
         int point = userPointService.deleteEventApply(userPointDeleteApplyDto);
 
-        return new ReviewEventResponseDto(eventDto.getUserId(), point);
+        UserMileageDto userMileageDto = userMileageService.updateMileage(userId, point);
+        return new ReviewEventResponseDto(eventDto.getUserId(), point, userMileageDto.getMileage());
     }
 
     private ReviewEventHistory appendReviewEventHistory(ReviewEventHistory entity) {

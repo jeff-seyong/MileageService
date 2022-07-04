@@ -24,6 +24,11 @@ public class UserMileage extends BaseInformation implements Persistable<String> 
     @Column(name = "mileage", nullable = false, columnDefinition = "유저 마일리지")
     private Integer mileage;
 
+    public UserMileage(String userId, Integer mileage) {
+        this.userId = userId;
+        this.mileage = mileage;
+    }
+
     @Override
     public String getId() {
         return this.userId;
@@ -32,5 +37,9 @@ public class UserMileage extends BaseInformation implements Persistable<String> 
     @Override
     public boolean isNew() {
         return Objects.isNull(super.registerDate);
+    }
+
+    public void updateMileage(int point) {
+        this.mileage += point;
     }
 }
