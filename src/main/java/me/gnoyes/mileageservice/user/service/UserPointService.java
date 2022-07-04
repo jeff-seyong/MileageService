@@ -1,9 +1,9 @@
-package me.gnoyes.mileageservice.review.service;
+package me.gnoyes.mileageservice.user.service;
 
 import me.gnoyes.mileageservice.constants.policy.PointPolicy;
-import me.gnoyes.mileageservice.review.model.dto.UserPointAddApplyDto;
-import me.gnoyes.mileageservice.review.model.dto.UserPointDeleteApplyDto;
-import me.gnoyes.mileageservice.review.model.dto.UserPointModApplyDto;
+import me.gnoyes.mileageservice.user.model.dto.UserPointAddApplyDto;
+import me.gnoyes.mileageservice.user.model.dto.UserPointDeleteApplyDto;
+import me.gnoyes.mileageservice.user.model.dto.UserPointModApplyDto;
 
 public interface UserPointService {
 

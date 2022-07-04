@@ -5,10 +5,8 @@ import lombok.NoArgsConstructor;
 import me.gnoyes.mileageservice.review.model.entity.BaseInformation;
 import org.springframework.data.domain.Persistable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -24,6 +22,9 @@ public class UserMileage extends BaseInformation implements Persistable<String> 
     @Column(name = "mileage", nullable = false, columnDefinition = "유저 마일리지")
     private Integer mileage;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private List<UserPointHistory> mileageHistory;
     public UserMileage(String userId, Integer mileage) {
         this.userId = userId;
         this.mileage = mileage;

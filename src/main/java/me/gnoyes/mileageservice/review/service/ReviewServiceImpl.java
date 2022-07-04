@@ -7,13 +7,14 @@ import me.gnoyes.mileageservice.constants.type.ResultCodeType;
 import me.gnoyes.mileageservice.event.model.dto.EventDto;
 import me.gnoyes.mileageservice.exception.ServiceException;
 import me.gnoyes.mileageservice.review.model.dto.ReviewEventResponseDto;
-import me.gnoyes.mileageservice.review.model.dto.UserPointAddApplyDto;
-import me.gnoyes.mileageservice.review.model.dto.UserPointDeleteApplyDto;
-import me.gnoyes.mileageservice.review.model.dto.UserPointModApplyDto;
+import me.gnoyes.mileageservice.user.model.dto.UserPointAddApplyDto;
+import me.gnoyes.mileageservice.user.model.dto.UserPointDeleteApplyDto;
+import me.gnoyes.mileageservice.user.model.dto.UserPointModApplyDto;
 import me.gnoyes.mileageservice.review.model.entity.ReviewEventHistory;
 import me.gnoyes.mileageservice.review.repository.ReviewEventHistoryRepository;
 import me.gnoyes.mileageservice.user.model.dto.UserMileageDto;
 import me.gnoyes.mileageservice.user.service.UserMileageService;
+import me.gnoyes.mileageservice.user.service.UserPointService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

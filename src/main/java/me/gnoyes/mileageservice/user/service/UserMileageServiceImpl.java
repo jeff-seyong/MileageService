@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.gnoyes.mileageservice.constants.type.ResultCodeType;
 import me.gnoyes.mileageservice.exception.ServiceException;
 import me.gnoyes.mileageservice.user.model.dto.UserMileageDto;
+import me.gnoyes.mileageservice.user.model.dto.UserMileageResponseDto;
 import me.gnoyes.mileageservice.user.model.entity.UserMileage;
 import me.gnoyes.mileageservice.user.repository.UserMileageRepository;
 import org.springframework.stereotype.Service;
@@ -20,13 +21,13 @@ public class UserMileageServiceImpl implements UserMileageService {
     private final UserMileageRepository userMileageRepository;
 
     @Transactional(readOnly = true)
-    public UserMileageDto getUserMileage(String userId) {
+    public UserMileageResponseDto getUserMileage(String userId) {
         Optional<UserMileage> optionalUserMileage = userMileageRepository.findById(userId);
         if (!optionalUserMileage.isPresent()) {
             throw new ServiceException(ResultCodeType.FAIL_U_001);
         }
-
-        return new UserMileageDto(optionalUserMileage.get());
+        UserMileage userMileage = optionalUserMileage.get();
+        return new UserMileageResponseDto(userMileage);
     }
 
     @Transactional

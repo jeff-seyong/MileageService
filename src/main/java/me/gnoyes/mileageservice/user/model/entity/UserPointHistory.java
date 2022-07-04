@@ -1,8 +1,9 @@
-package me.gnoyes.mileageservice.review.model.entity;
+package me.gnoyes.mileageservice.user.model.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.gnoyes.mileageservice.constants.type.PointType;
+import me.gnoyes.mileageservice.review.model.entity.BaseInformation;
 
 import javax.persistence.*;
 

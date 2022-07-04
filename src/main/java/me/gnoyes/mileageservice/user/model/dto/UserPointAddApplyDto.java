@@ -1,4 +1,4 @@
-package me.gnoyes.mileageservice.review.model.dto;
+package me.gnoyes.mileageservice.user.model.dto;
 
 import lombok.Builder;
 import lombok.Getter;

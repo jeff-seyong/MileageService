@@ -1,14 +1,14 @@
-package me.gnoyes.mileageservice.review.service;
+package me.gnoyes.mileageservice.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.gnoyes.mileageservice.constants.policy.PointPolicy;
 import me.gnoyes.mileageservice.constants.type.PointType;
-import me.gnoyes.mileageservice.review.model.dto.UserPointAddApplyDto;
-import me.gnoyes.mileageservice.review.model.dto.UserPointDeleteApplyDto;
-import me.gnoyes.mileageservice.review.model.dto.UserPointModApplyDto;
-import me.gnoyes.mileageservice.review.model.entity.UserPointHistory;
-import me.gnoyes.mileageservice.review.repository.UserPointHistoryRepository;
+import me.gnoyes.mileageservice.user.model.dto.UserPointAddApplyDto;
+import me.gnoyes.mileageservice.user.model.dto.UserPointDeleteApplyDto;
+import me.gnoyes.mileageservice.user.model.dto.UserPointModApplyDto;
+import me.gnoyes.mileageservice.user.model.entity.UserPointHistory;
+import me.gnoyes.mileageservice.user.repository.UserPointHistoryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
