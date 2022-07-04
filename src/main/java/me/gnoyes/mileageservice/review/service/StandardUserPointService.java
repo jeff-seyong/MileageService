@@ -85,22 +85,34 @@ public class StandardUserPointService implements UserPointService {
     }
 
     private int checkTextPoint(int oldContentsSize, int newContentsSize) {
+        // 수정 전/후가 변동 없으면 0
         if (oldContentsSize == newContentsSize) {
             return 0;
         }
-        // 리뷰 내용 길이가 이전과 다른 경우
-        // 수정된 길이가 MIN_TEXT_LENGTH 보다 작으면 : 포인트 회수
-        // 수정된 길이가 MIN_TEXT_LENGTH 보다 크거나 같으면 : 포인트 부여
-        return newContentsSize < MIN_TEXT_LENGTH ? -TEXT_POINT : TEXT_POINT;
+        // 수정 전엔 TEXT_POINT 받았는데 수정 후 기준 미달이면 회수
+        if (MIN_TEXT_LENGTH < oldContentsSize && newContentsSize < MIN_TEXT_LENGTH) {
+            return -TEXT_POINT;
+        }
+        // 수정 전엔 TEXT_POINT 못 받았는데 수정 후 기준 충족하면 부여
+        if (oldContentsSize < MIN_TEXT_LENGTH && MIN_TEXT_LENGTH < newContentsSize) {
+            return TEXT_POINT;
+        }
+        return 0;
     }
 
     private int checkPhotoPoint(int oldPhotoCount, int newPhotoCount) {
+        // 수정 전/후가 변동 없으면 0
         if (oldPhotoCount == newPhotoCount) {
             return 0;
         }
-        // 첨부 이미지 개수가 이전과 다르고,
-        // 수정된 길이가 MIN_PHOTOS_LENGTH 보다 작으면 >> 포인트 회수
-        // 수정된 길이가 MIN_PHOTOS_LENGTH 보다 크거나 같으면 >> 포인트 부여
-        return newPhotoCount < MIN_PHOTOS_LENGTH ? -PHOTO_POINT : PHOTO_POINT;
+        // 수정 전엔 TEXT_POINT 받았는데 수정 후 기준 미달이면 회수
+        if (MIN_PHOTOS_LENGTH < oldPhotoCount && newPhotoCount < MIN_PHOTOS_LENGTH) {
+            return -PHOTO_POINT;
+        }
+        // 수정 전엔 TEXT_POINT 못 받았는데 수정 후 기준 충족하면 부여
+        if (oldPhotoCount < MIN_PHOTOS_LENGTH && MIN_PHOTOS_LENGTH < newPhotoCount) {
+            return PHOTO_POINT;
+        }
+        return 0;
     }
 }
