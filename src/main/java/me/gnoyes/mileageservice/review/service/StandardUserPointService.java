@@ -34,18 +34,20 @@ public class StandardUserPointService implements UserPointService {
     @Transactional
     public int addEventApply(UserPointAddApplyDto addDto) {
         log.info("> userPointAddApplyDto: {}", addDto);
+        String userId = addDto.getUserId();
+        String reviewId = addDto.getReviewId();
         int point = 0;
         if (addDto.isBonusFlag()) {
             point += BONUS_POINT;
-            userPointHistoryRepository.save(new UserPointHistory(addDto.getReviewId(), BONUS_POINT, PointType.BONUS_POINT));
+            userPointHistoryRepository.save(new UserPointHistory(userId, reviewId, BONUS_POINT, PointType.BONUS_POINT));
         }
         if (addDto.getContentsSize() >= MIN_TEXT_LENGTH) {
             point += TEXT_POINT;
-            userPointHistoryRepository.save(new UserPointHistory(addDto.getReviewId(), TEXT_POINT, PointType.TEXT_POINT));
+            userPointHistoryRepository.save(new UserPointHistory(userId, reviewId, TEXT_POINT, PointType.TEXT_POINT));
         }
         if (addDto.getPhotoCount() >= MIN_PHOTOS_LENGTH) {
             point += PHOTO_POINT;
-            userPointHistoryRepository.save(new UserPointHistory(addDto.getReviewId(), PHOTO_POINT, PointType.PHOTO_POINT));
+            userPointHistoryRepository.save(new UserPointHistory(userId, reviewId, PHOTO_POINT, PointType.PHOTO_POINT));
         }
         return point;
     }
@@ -53,18 +55,19 @@ public class StandardUserPointService implements UserPointService {
     @Transactional
     public int modEventApply(UserPointModApplyDto modDto) {
         log.info("> userPointModApplyDto: {}", modDto);
+        String userId = modDto.getUserId();
         String reviewId = modDto.getReviewId();
         int point = 0;
 
         int oldContentsSize = modDto.getOldContentsSize();
         int newContentsSize = modDto.getNewContentsSize();
         point += checkTextPoint(oldContentsSize, newContentsSize);
-        userPointHistoryRepository.save(new UserPointHistory(reviewId, point, PointType.TEXT_POINT));
+        userPointHistoryRepository.save(new UserPointHistory(userId, reviewId, point, PointType.TEXT_POINT));
 
         int oldPhotoCount = modDto.getOldPhotoCount();
         int newPhotoCount = modDto.getNewPhotoCount();
         point += checkPhotoPoint(oldPhotoCount, newPhotoCount);
-        userPointHistoryRepository.save(new UserPointHistory(reviewId, point, PointType.PHOTO_POINT));
+        userPointHistoryRepository.save(new UserPointHistory(userId, reviewId, point, PointType.PHOTO_POINT));
 
         return point;
     }
@@ -72,6 +75,7 @@ public class StandardUserPointService implements UserPointService {
     @Transactional
     public int deleteEventApply(UserPointDeleteApplyDto deleteDto) {
         log.info("> UserPointDeleteApplyDto: {}", deleteDto);
+        String userId = deleteDto.getUserId();
         String reviewId = deleteDto.getReviewId();
         List<UserPointHistory> userPointHistoryList = userPointHistoryRepository.findByReviewId(reviewId);
 
@@ -79,7 +83,7 @@ public class StandardUserPointService implements UserPointService {
                 .mapToInt(UserPointHistory::getPoint)
                 .sum();
 
-        userPointHistoryRepository.save(new UserPointHistory(reviewId, -reviewPointSum, PointType.REVIEW_DELETE));
+        userPointHistoryRepository.save(new UserPointHistory(userId, reviewId, -reviewPointSum, PointType.REVIEW_DELETE));
 
         return -reviewPointSum;
     }
