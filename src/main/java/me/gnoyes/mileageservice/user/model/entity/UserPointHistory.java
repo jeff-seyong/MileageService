@@ -37,4 +37,13 @@ public class UserPointHistory extends BaseInformation {
         this.point = point;
         this.reason = reason;
     }
+
+    // for Test
+    UserPointHistory(Long pointHistoryId, String userId, String reviewId, Integer point, PointType reason) {
+        this.pointHistoryId = pointHistoryId;
+        this.userId = userId;
+        this.reviewId = reviewId;
+        this.point = point;
+        this.reason = reason;
+    }
 }

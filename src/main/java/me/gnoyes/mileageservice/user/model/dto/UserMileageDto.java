@@ -25,5 +25,13 @@ public class UserMileageDto {
         this.registerDate = entity.getRegisterDate();
         this.updateDate = entity.getUpdateDate();
     }
+
+    // for test
+    UserMileageDto(String userId, Integer mileage, LocalDateTime registerDate, LocalDateTime updateDate) {
+        this.userId = userId;
+        this.mileage = mileage;
+        this.registerDate = registerDate;
+        this.updateDate = updateDate;
+    }
 }
 

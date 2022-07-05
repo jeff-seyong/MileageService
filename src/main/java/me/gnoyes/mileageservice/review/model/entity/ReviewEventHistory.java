@@ -7,6 +7,7 @@ import me.gnoyes.mileageservice.constants.policy.PointPolicy;
 import me.gnoyes.mileageservice.event.model.dto.EventDto;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "review_event_history")
@@ -49,6 +50,19 @@ public class ReviewEventHistory extends BaseInformation {
         this.action = eventDto.getAction();
         this.contentsSize = eventDto.getContent().length();
         this.photoCount = eventDto.getAttachedPhotoIds().size();
+    }
+
+    // for Test
+    ReviewEventHistory(String userId, String placeId, String reviewId, EventAction action, int contentsSize, int photoCount, PointPolicy pointPolicy, LocalDateTime registerDate, LocalDateTime updateDate) {
+        this.userId = userId;
+        this.placeId = placeId;
+        this.reviewId = reviewId;
+        this.action = action;
+        this.contentsSize = contentsSize;
+        this.photoCount = photoCount;
+        this.pointPolicy = pointPolicy;
+        this.registerDate = registerDate;
+        this.updateDate = updateDate;
     }
 
     public void recordPointPolicy(PointPolicy pointPolicy) {

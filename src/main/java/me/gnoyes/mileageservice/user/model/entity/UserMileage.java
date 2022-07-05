@@ -6,6 +6,7 @@ import me.gnoyes.mileageservice.review.model.entity.BaseInformation;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,6 +29,15 @@ public class UserMileage extends BaseInformation implements Persistable<String> 
     public UserMileage(String userId, Integer mileage) {
         this.userId = userId;
         this.mileage = mileage;
+    }
+
+    // for Test
+    UserMileage(String userId, Integer mileage, List<UserPointHistory> mileageHistory, LocalDateTime registerDate, LocalDateTime updateDate) {
+        this.userId = userId;
+        this.mileage = mileage;
+        this.mileageHistory = mileageHistory;
+        this.registerDate = registerDate;
+        this.updateDate = updateDate;
     }
 
     @Override

@@ -13,9 +13,23 @@ public class EventDto {
     private EventAction action;
     private String reviewId;
     private String content;
-    private final List<String> attachedPhotoIds = new ArrayList<>();
+    private List<String> attachedPhotoIds = new ArrayList<>();
     private String userId;
     private String placeId;
+
+    public EventDto() {
+    }
+
+    // for Test
+    public EventDto(EventType type, EventAction action, String reviewId, String content, List<String> attachedPhotoIds, String userId, String placeId) {
+        this.type = type;
+        this.action = action;
+        this.reviewId = reviewId;
+        this.content = content;
+        this.attachedPhotoIds = attachedPhotoIds;
+        this.userId = userId;
+        this.placeId = placeId;
+    }
 
     @Override
     public String toString() {
