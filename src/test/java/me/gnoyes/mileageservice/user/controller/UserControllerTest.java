@@ -1,6 +1,7 @@
 package me.gnoyes.mileageservice.user.controller;
 
 import me.gnoyes.mileageservice.config.AbstractControllerTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ class UserControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("유저 마일리지 조회 API 테스트(/mileage/{userId})")
     void getMileage() throws Exception {
         String userId = "userId-1";

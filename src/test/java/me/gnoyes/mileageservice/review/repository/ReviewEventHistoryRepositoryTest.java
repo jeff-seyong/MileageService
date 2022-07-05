@@ -4,10 +4,7 @@ import me.gnoyes.mileageservice.constants.action.EventAction;
 import me.gnoyes.mileageservice.constants.policy.PointPolicy;
 import me.gnoyes.mileageservice.review.model.entity.ReviewEventHistory;
 import me.gnoyes.mileageservice.review.model.entity.ReviewEventHistoryBuilder;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -24,6 +21,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Disabled
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
