@@ -8,7 +8,7 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_HOST: "root"
+      MYSQL_ROOT_HOST: '%'
       MYSQL_DATABASE: "eventservice"
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       TZ: Asia/Seoul
