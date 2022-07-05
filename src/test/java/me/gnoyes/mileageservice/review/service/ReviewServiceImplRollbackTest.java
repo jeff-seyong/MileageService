@@ -8,6 +8,7 @@ import me.gnoyes.mileageservice.event.model.dto.EventDtoBuilder;
 import me.gnoyes.mileageservice.exception.ServiceException;
 import me.gnoyes.mileageservice.user.model.dto.UserPointAddApplyDto;
 import me.gnoyes.mileageservice.user.service.UserPointService;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,7 +30,7 @@ public class ReviewServiceImplRollbackTest {
     @MockBean
     UserPointService userPointService;
 
-    @Test
+    // @Test
     @Transactional
     @Rollback(value = false)
     void 자식_트랜잭션에서_익셉션_발생하는_경우() {
