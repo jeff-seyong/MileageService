@@ -1,7 +1,5 @@
 # Mileage Service Demo
 
----
-
 ## Getting Start!
 
 ```bash
