@@ -2,6 +2,15 @@
 
 ## Getting Start!
 
+- environment
+```text
+- Java 8
+- SpringBoot 2.7.1
+- MySql 5.7 
+```
+
+<br>
+
 ```bash
 $ git clone https://github.com/jeff-seyong/MileageService.git
 $ cd MileageService
